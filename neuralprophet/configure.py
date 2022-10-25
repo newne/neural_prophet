@@ -36,8 +36,8 @@ class Normalization:
     global_normalization: bool
     global_time_normalization: bool
     unknown_data_normalization: bool
-    local_data_params: dict = None  # nested dict (key1: name of dataset, key2: name of variable)
-    global_data_params: dict = None  # dict where keys are names of variables
+    local_data_params: Optional[dict] = None  # nested dict (key1: name of dataset, key2: name of variable)
+    global_data_params: Optional[dict] = None  # dict where keys are names of variables
 
     def init_data_params(
         self,
@@ -98,9 +98,9 @@ class Train:
     newer_samples_weight: float = 1.0
     newer_samples_start: float = 0.0
     reg_delay_pct: float = 0.5
-    reg_lambda_trend: float = None
-    trend_reg_threshold: Union[bool, float] = None
-    reg_lambda_season: float = None
+    reg_lambda_trend: Optional[float] = None
+    trend_reg_threshold: Optional[Union[bool, float]] = None
+    reg_lambda_season: Optional[float] = None
     n_data: int = field(init=False)
     loss_func_name: str = field(init=False)
 
@@ -397,7 +397,7 @@ class Holidays:
     lower_window: int
     upper_window: int
     mode: str = "additive"
-    reg_lambda: float = None
+    reg_lambda: Optional[float] = None
     holiday_names: set = field(init=False)
 
     def init_holidays(self, df=None):
