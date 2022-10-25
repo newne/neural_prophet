@@ -4,7 +4,7 @@ import logging
 import math
 from collections import OrderedDict
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, List, Optional, Tuple, Union
 
 import numpy as np
 import pandas as pd
@@ -407,7 +407,13 @@ def normalize(df, data_params):
     return df
 
 
-def check_single_dataframe(df, check_y, covariates, regressors, events):
+def check_single_dataframe(
+    df: pd.DataFrame,
+    check_y: bool,
+    covariates,
+    regressors,
+    events,
+):
     """Performs basic data sanity checks and ordering
     as well as prepare dataframe for fitting or predicting.
 
@@ -482,7 +488,13 @@ def check_single_dataframe(df, check_y, covariates, regressors, events):
     return df
 
 
-def check_dataframe(df, check_y=True, covariates=None, regressors=None, events=None):
+def check_dataframe(
+    df: pd.DataFrame,
+    check_y: bool = True,
+    covariates=None,
+    regressors=None,
+    events=None,
+) -> pd.DataFrame:
     """Performs basic data sanity checks and ordering,
     as well as prepare dataframe for fitting or predicting.
 
@@ -514,7 +526,14 @@ def check_dataframe(df, check_y=True, covariates=None, regressors=None, events=N
     return checked_df
 
 
-def _crossvalidation_split_df(df, n_lags, n_forecasts, k, fold_pct, fold_overlap_pct=0.0):
+def _crossvalidation_split_df(
+    df: Union[pd.DataFrame, pd.Series],
+    n_lags: int,
+    n_forecasts: int,
+    k: int,
+    fold_pct: float,
+    fold_overlap_pct: float = 0.0,
+) -> List[Tuple[pd.DataFrame, pd.DataFrame]]:
     """Splits data in k folds for crossvalidation.
 
     Parameters
@@ -674,8 +693,14 @@ def _crossvalidation_with_time_threshold(df, n_lags, n_forecasts, k, fold_pct, f
 
 
 def crossvalidation_split_df(
-    df, n_lags, n_forecasts, k, fold_pct, fold_overlap_pct=0.0, global_model_cv_type="global-time"
-):
+    df,
+    n_lags: int,
+    n_forecasts: int,
+    k: int,
+    fold_pct: float,
+    fold_overlap_pct: float = 0.0,
+    global_model_cv_type: str = "global-time",
+) -> List[Tuple[pd.DataFrame, pd.DataFrame]]:
     """Splits data in k folds for crossvalidation.
 
     Parameters
@@ -901,7 +926,14 @@ def split_considering_timestamp(df, n_lags, n_forecasts, inputs_overbleed, thres
     return df_train, df_val
 
 
-def split_df(df, n_lags, n_forecasts, valid_p=0.2, inputs_overbleed=True, local_split=False):
+def split_df(
+    df: Union[pd.DataFrame, pd.Series],
+    n_lags: int,
+    n_forecasts: int,
+    valid_p: float = 0.2,
+    inputs_overbleed: bool = True,
+    local_split: bool = False,
+) -> Tuple[pd.DataFrame, pd.DataFrame]:
     """Splits timeseries df into train and validation sets.
 
     Prevents overbleed of targets. Overbleed of inputs can be configured.
@@ -1059,7 +1091,7 @@ def add_missing_dates_nan(df, freq):
     return df_all, num_added
 
 
-def fill_linear_then_rolling_avg(series, limit_linear, rolling):
+def fill_linear_then_rolling_avg(series: pd.Series, limit_linear: int, rolling: int):
     """Adds missing dates, fills missing values with linear imputation or trend.
 
     Parameters
@@ -1096,7 +1128,7 @@ def fill_linear_then_rolling_avg(series, limit_linear, rolling):
     return series, remaining_na
 
 
-def get_freq_dist(ds_col):
+def get_freq_dist(ds_col: pd.Series):
     """Get frequency distribution of ``ds`` column.
 
     Parameters
@@ -1332,7 +1364,9 @@ def infer_frequency(df, freq, n_lags, min_freq_percentage=0.7):
     return freq_str
 
 
-def create_dict_for_events_or_regressors(df, other_df, other_df_name):  # Not sure about the naming of this function
+def create_dict_for_events_or_regressors(
+    df, other_df, other_df_name
+) -> dict:  # Not sure about the naming of this function
     """Create a dict for events or regressors according to input df.
 
     Parameters
