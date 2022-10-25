@@ -89,10 +89,10 @@ class MissingDataHandling:
 
 @dataclass
 class Train:
-    quantiles: Union[list, None]
-    learning_rate: Union[float, None]
-    epochs: Union[int, None]
-    batch_size: Union[int, None]
+    quantiles: list
+    learning_rate: float
+    epochs: int
+    batch_size: int
     loss_func: Union[str, torch.nn.modules.loss._Loss, Callable]
     optimizer: Union[str, torch.optim.Optimizer]
     newer_samples_weight: float = 1.0
